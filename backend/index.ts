@@ -34,8 +34,19 @@ import { resend } from "./lib/resend";
 const port = process.env.PORT || 3000;
 const app = express();
 
+const allowedOrigins = [
+  "https://pet-finder-react-nc.onrender.com",
+  "https://pet-finder-react-nc.web.app",
+];
+
 const corsOptions = {
-  origin: "https://pet-finder-react-nc.onrender.com",
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Origen no permitido por CORS"));
+    }
+  },
   methods: ["get", "post", "put", "delete", "options"],
   allowedHeaders: ["content-type", "authorization"],
   credentials: true,
