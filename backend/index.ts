@@ -55,9 +55,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
 
-sequelize.sync({ force: true }).then((res) => {
+/* sequelize.sync({ force: true }).then((res) => {
   console.log(res);
-});
+}); */
 
 // AUTENTICACIÓN: REGISTRA UN NUEVO USUARIO
 app.post("/sign-up", async (req, res) => {
