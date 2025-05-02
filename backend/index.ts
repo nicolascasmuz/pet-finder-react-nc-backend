@@ -37,6 +37,8 @@ const app = express();
 const allowedOrigins = [
   "https://pet-finder-react-nc.onrender.com",
   "https://pet-finder-react-nc.web.app",
+  "http://127.0.0.1:8080",
+  "http://localhost:8080",
 ];
 
 const corsOptions = {
