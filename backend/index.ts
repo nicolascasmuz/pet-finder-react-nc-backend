@@ -140,30 +140,34 @@ app.get("/log-in", async (req, res) => {
   }
   const capitalizedNick = capitalizeFirstLetter(splitEmail);
 
-  const [profile, createdProfile] = await Profile.findOrCreate({
-    where: { userId: foundAuth?.get("user_id") },
-    defaults: {
-      picURL:
-        "https://res.cloudinary.com/dbgjrxaqf/image/upload/v1691418721/blank-profile-picture_cweptd.png",
-      nickname: capitalizedNick,
-      email: foundAuth?.get("email"),
-      password: getSHA256ofString(password),
-      address: "",
-      location: "",
-      lat: "",
-      lng: "",
-      userId: foundAuth?.get("user_id"),
-    },
-  });
+  if (foundAuth) {
+    const [profile, createdProfile] = await Profile.findOrCreate({
+      where: { userId: foundAuth?.get("user_id") },
+      defaults: {
+        picURL:
+          "https://res.cloudinary.com/dbgjrxaqf/image/upload/v1691418721/blank-profile-picture_cweptd.png",
+        nickname: capitalizedNick,
+        email: foundAuth?.get("email"),
+        password: getSHA256ofString(password),
+        address: "",
+        location: "",
+        lat: "",
+        lng: "",
+        userId: foundAuth?.get("user_id"),
+      },
+    });
 
-  try {
-    if (foundAuth == null) {
-      res.status(400).json({ error: "email or pass are incorrect" });
-    } else {
+    try {
       res.status(200).json({ profile });
+    } catch {
+      res.status(401).json({ error: true });
     }
-  } catch {
-    res.status(401).json({ error: true });
+  } else {
+    try {
+      res.status(400).json({ error: "email or pass are incorrect" });
+    } catch {
+      res.status(401).json({ error: true });
+    }
   }
 });
 
@@ -270,8 +274,8 @@ app.post("/send-mail", async (req, res) => {
   } = req.body;
 
   const msg = {
-    from: "onboarding@resend.dev",
-    to: "nicolascasmuz@gmail.com",
+    from: "Pet Finder <onboarding@resend.dev>",
+    to: ownerEmail,
     subject: `Hola ${ownerName}, parece que alguien ha visto a ${missingPetName}`,
     html: `<h4>Reportado por el usuario: ${myName}</h4><h4>Email: ${myEmail}</h4><p>Mensaje: ${info}</p>`,
   };
