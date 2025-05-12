@@ -5,7 +5,7 @@ const sequelize = new Sequelize(process.env.ELEPHANTSQL_URL, {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false, // Necesario para conexiones SSL con Neon
+      rejectUnauthorized: false,
     },
   },
 });
