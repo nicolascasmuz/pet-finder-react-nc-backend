@@ -58,7 +58,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
 
-/* sequelize.sync({ force: true }).then((res) => {
+/* sequelize.sync({ alter: true }).then((res) => {
   console.log(res);
 }); */
 
